@@ -1,0 +1,74 @@
+@mixin flex-center($gap: 0) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $gap;
+}
+main {
+  @include flex-center(1rem);
+  height: auto;
+  min-height: 100vh;
+
+  background: #151515;
+
+  .form-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: space-around;
+    // padding: 1rem;
+    flex-wrap: wrap;
+
+    overflow: hidden;
+    .left {
+      width: 50%;
+      height: 100%;
+      @include flex-center;
+
+      img {
+        width: 100%;
+
+        object-fit: cover;
+
+        border-radius: 0.5rem;
+      }
+    }
+    .right {
+      width: 50%;
+      height: 100%;
+      padding: 1rem;
+      @include flex-center(1rem);
+      form {
+        @include flex-center(1rem);
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        color: #151515;
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          width: 100%;
+        }
+        input {
+          padding: 0.7rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          outline: none;
+        }
+        p {
+          font-size: 0.8rem;
+
+          a {
+            color: blue;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}
