@@ -1,4 +1,4 @@
-# Moodify 🎵
+# VIZO 🎵
 
 A full-stack music application that detects your emotional state through facial expressions and recommends songs that match your mood in real-time.
 
