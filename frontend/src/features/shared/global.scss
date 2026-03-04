@@ -26,3 +26,23 @@ body,
     "Helvetica Neue",
     sans-serif;
 }
+
+.expression-status,.expression-actions{
+  display: flex;
+  justify-content: center;
+gap: 1rem;
+margin-top: .6rem;
+}
+
+.expression-video{
+  width: 60%;
+
+}
+.expression-video-wrapper{
+  display: flex;
+  justify-content: center;
+}
+.expression-page{
+  min-height: 60vh;
+
+}

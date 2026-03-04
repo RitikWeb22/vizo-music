@@ -26,7 +26,7 @@ const Register = () => {
       <div className="form-container">
         <div className="left">
           <img
-            src="https://i.pinimg.com/736x/54/5e/22/545e22bbaa3a0458c7cee96ec79ad64d.jpg"
+            src="https://i.pinimg.com/736x/b3/6e/31/b36e317833054b35ad70fe7160ec8c55.jpg"
             alt=""
           />
         </div>

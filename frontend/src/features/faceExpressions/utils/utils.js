@@ -17,18 +17,35 @@ export const init = async (landmarkerRef, videoRef) => {
 
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
   videoRef.current.srcObject = stream;
-  await videoRef.current.play();
+
+  try {
+    await videoRef.current.play();
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.error("Error playing video:", error);
+    }
+  }
 };
 
-export const detect = (landmarkerRef, videoRef) => {
-  if (!landmarkerRef.current || !videoRef.current) return "No Face 😐";
+export const detect = (landmarkerRef, videoRef, currentExpression, setCurrentExpression) => {
+  if (!landmarkerRef.current || !videoRef.current) {
+    if (currentExpression !== "No Face 😐") {
+      setCurrentExpression("No Face 😐");
+    }
+    return;
+  }
 
   const results = landmarkerRef.current.detectForVideo(
     videoRef.current,
     performance.now(),
   );
 
-  if (!results.faceBlendshapes?.length) return "No Face 😐";
+  if (!results.faceBlendshapes?.length) {
+    if (currentExpression !== "No Face 😐") {
+      setCurrentExpression("No Face 😐");
+    }
+    return;
+  }
 
   const blendshapes = results.faceBlendshapes[0].categories;
 
@@ -40,23 +57,21 @@ export const detect = (landmarkerRef, videoRef) => {
   const jawOpen = getScore("jawOpen");
   const frownLeft = getScore("mouthFrownLeft");
   const frownRight = getScore("mouthFrownRight");
-  const browDownLeft = getScore("browDownLeft");
-  const browDownRight = getScore("browDownRight");
-  const eyeBlinkLeft = getScore("eyeBlinkLeft");
-  const eyeBlinkRight = getScore("eyeBlinkRight");
+  const browUp = getScore("browInnerUp");
 
-  if (smileLeft > 0.6 && smileRight > 0.6 && jawOpen > 0.4)
-    return "Laughing 😂";
+  let detectedExpression = "neutral";
 
-  if (smileLeft > 0.5 && smileRight > 0.5) return "Happy 😄";
+  if (smileLeft > 0.5 && smileRight > 0.5) {
+    detectedExpression = "happy";
+  } else if (frownLeft > 0.0001 && frownRight > 0.0001) {
+    detectedExpression = "sad";
+  } else if (jawOpen > 0.1 && browUp > 0.0001) {
+    detectedExpression = "surprised";
+  }
 
-  if (frownLeft > 0.5 && frownRight > 0.5) return "Sad 😢";
+  if (currentExpression !== detectedExpression) {
+    setCurrentExpression(detectedExpression);
+  }
 
-  if (browDownLeft > 0.6 && browDownRight > 0.6) return "Angry 😠";
-
-  if (eyeBlinkLeft > 0.7 && eyeBlinkRight < 0.3) return "Wink 😉";
-
-  if (jawOpen > 0.6) return "Surprised 😲";
-
-  return "Neutral 😐";
+  return detectedExpression;
 };

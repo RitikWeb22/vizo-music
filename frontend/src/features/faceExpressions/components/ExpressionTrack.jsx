@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { init, detect } from "../utils/utils";
 import Navbar from "./Navbar";
 
-const ExpressionTrack = () => {
+const Expression = ({ onClick = () => {} }) => {
   const videoRef = useRef(null);
   const landmarkerRef = useRef(null);
   const [expression, setExpression] = useState("Moodify face detecting...");
@@ -26,28 +26,33 @@ const ExpressionTrack = () => {
   }, []);
 
   const handleDetect = () => {
-    const result = detect(landmarkerRef, videoRef);
-    setExpression(result);
+    const songs = detect(landmarkerRef, videoRef, expression, setExpression);
+
+    onClick(songs);
   };
 
   return (
     <>
       <Navbar />
-      <div style={{ textAlign: "center" }}>
-        <video
-          ref={videoRef}
-          style={{ width: "400px", borderRadius: "12px" }}
-          playsInline
-          autoPlay
-        />
-        <h2>{expression}</h2>
+      <main className="expression-page">
+        <section className="expression-card">
+          <div className="expression-video-wrapper">
+            <video ref={videoRef} className="expression-video" playsInline />
+          </div>
 
-        <button onClick={handleDetect} className="button btn-primary">
-          Detect Face Expression
-        </button>
-      </div>
+          <div className="expression-status">
+            <span>{expression}</span>
+          </div>
+
+          <div className="expression-actions">
+            <button onClick={handleDetect} className="button btn-primary btn">
+              Detect Face Expression
+            </button>
+          </div>
+        </section>
+      </main>
     </>
   );
 };
 
-export default ExpressionTrack;
+export default Expression;
