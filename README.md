@@ -1,4 +1,4 @@
-# Moodify 🎵
+# VIZO 🎵
 
 A full-stack music application that detects your emotional state through facial expressions and recommends songs that match your mood in real-time.
 
@@ -36,7 +36,7 @@ A full-stack music application that detects your emotional state through facial 
 ## Project Structure 📁
 
 ```
-moodify/
+Vizo/
 ├── backend/                 # Node.js/Express server
 │   ├── src/
 │   │   ├── app.js          # Express app configuration
@@ -92,7 +92,7 @@ npm install
 
 ```
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/moodify
+MONGODB_URI=mongodb://localhost:27017/vizo
 REDIS_URL=redis://localhost:6379
 JWT_SECRET=your_secret_key_here
 IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
