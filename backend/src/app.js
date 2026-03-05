@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+<<<<<<< HEAD
 
 const allowedOrigins = (process.env.CORS_ORIGINS || "")
     .split(",")
@@ -23,6 +24,9 @@ app.use(
         credentials: true,
     })
 );
+=======
+app.use(cors({ origin: "https://vizo-5kkc.onrender.com", credentials: true }));
+>>>>>>> 0c6a2f1b363c0da18fd575051ea72d478df681db
 app.use(express.static("public"))
 
 // routes
