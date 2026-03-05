@@ -14,14 +14,7 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  {
-    path: "/upload",
-    element: (
-      <ProtectedRoute>
-        <SongUpload />
-      </ProtectedRoute>
-    ),
-  },
+
   {
     path: "/login",
     element: <Login />,

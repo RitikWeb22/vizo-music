@@ -4,7 +4,25 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const defaultOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+];
+
+app.use(
+    cors({
+        origin: [...new Set([...defaultOrigins, ...allowedOrigins])],
+        credentials: true,
+    })
+);
 app.use(express.static("public"))
 
 // routes
@@ -14,5 +32,5 @@ app.use("/api/auth", authRouter);
 
 
 // song route
-app.use("/api/songs",songRouter)
+app.use("/api/songs", songRouter)
 module.exports = app;

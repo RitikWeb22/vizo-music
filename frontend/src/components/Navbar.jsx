@@ -14,9 +14,6 @@ const Navbar = ({ username, onLogout }) => {
       </div>
 
       <div className="navbar__right">
-        <a href="/upload" className="navbar__upload-link">
-          Upload Song
-        </a>
         {username && (
           <div className="navbar__user">
             <span className="navbar__username">{username}</span>

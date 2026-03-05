@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const api =  axios.create({
-  baseURL: "http://localhost:3000/api/auth",
+const api = axios.create({
+  baseURL: "https://vizo-5kkc.onrender.com/api/auth",
   withCredentials: true,
 });
 // Register
@@ -25,7 +25,11 @@ export async function login({ email, password }) {
 
     return response.data;
   } catch (error) {
-    console.log("Backend Error:", error.response?.data);
+    if (!error.response) {
+      console.error("Network/CORS error: unable to reach backend", error.message);
+    } else {
+      console.error("Backend Error:", error.response.data);
+    }
     throw error;
   }
 }

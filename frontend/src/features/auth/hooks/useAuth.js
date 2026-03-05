@@ -30,6 +30,7 @@ export function useAuth() {
       setLoading(true);
       const data = await register({ email, password, username });
       setUser(data.user);
+      return data;
     } catch (error) {
       throw error;
     } finally {
@@ -43,6 +44,7 @@ export function useAuth() {
       setLoading(true);
       const data = await login({ email, password });
       setUser(data.user);
+      return data;
     } catch (error) {
       throw error;
     } finally {
@@ -56,14 +58,16 @@ export function useAuth() {
       setLoading(true);
       const data = await getMe();
       setUser(data.user);
+      return data;
     } catch (error) {
-      throw error;
+      setUser(null);
+      return null;
     }
     finally {
       setLoading(false);
     }
- 
-  }; 
+
+  };
   // Logout
   const handleLogout = async () => {
     try {
@@ -73,9 +77,9 @@ export function useAuth() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
   useEffect(() => {
-    handleGetMe();
+    void handleGetMe();
   }, []);
 
 

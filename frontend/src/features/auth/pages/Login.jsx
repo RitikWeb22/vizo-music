@@ -10,12 +10,15 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { handleLogin, loading } = useAuth();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleLogin({email, password}).then((res) => {
-      console.log("Login successful:" , res);
+    try {
+      const res = await handleLogin({ email, password });
+      console.log("Login successful:", res);
       navigate("/");
-    });
+    } catch (error) {
+      console.error("Login failed:", error?.response?.data || error.message);
+    }
   };
   if (loading) {
     return <Loading />;
