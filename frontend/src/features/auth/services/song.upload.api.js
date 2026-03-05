@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://vizo-5kkc.onrender.com/api/songs",
+    baseURL: "https://vizo-music.onrender.com/api/songs",
     withCredentials: true,
 });
 

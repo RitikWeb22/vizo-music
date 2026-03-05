@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://vizo-5kkc.onrender.com/api/auth",
+  baseURL: "https://vizo-music.onrender.com/api/auth",
   withCredentials: true,
 });
 // Register
