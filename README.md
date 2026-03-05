@@ -1,14 +1,17 @@
 # VIZO 🎵
 
-A full-stack music application that detects your emotional state through facial expressions and recommends songs that match your mood in real-time.
+A full-stack face-driven music player that detects your emotional state through facial expressions and recommends songs that match your mood in real-time.
 
 ## Features ✨
 
-- **Mood Detection**: Uses MediaPipe Vision to analyze facial expressions and determine emotional state
+- **Real-Time Mood Detection**: Uses MediaPipe Vision to analyze facial expressions and determine emotional state
 - **User Authentication**: Secure sign up and login system with JWT-based authentication
-- **Song Management**: Upload, store, and manage your personal music library
-- **Smart Recommendations**: Get song recommendations based on your real-time emotional state
-- **Caching**: Redis-based caching for improved performance
+- **Profile Management**: View username in navbar with quick logout functionality
+- **Song Upload**: Upload MP3 files with mood categorization (Happy, Sad, Surprised)
+- **Smart Music Player**: Manual playback control with full player features (play/pause, seek, volume, speed control)
+- **Mood-Based Recommendations**: Get song suggestions based on your real-time emotional state
+- **Protected Routes**: Secure pages that require authentication
+- **Redis Caching**: Improved performance with Redis-based caching
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Tech Stack 🛠️
@@ -31,6 +34,8 @@ A full-stack music application that detects your emotional state through facial 
 - **Routing**: React Router v7
 - **HTTP Client**: Axios
 - **Face Detection**: MediaPipe Tasks Vision
+- **State Management**: React Context API
+- **Form Handling**: Two-way data binding with controlled components
 - **Linting**: ESLint
 
 ## Project Structure 📁
@@ -52,9 +57,23 @@ Vizo/
 │
 └── frontend/               # React + Vite application
     ├── src/
-    │   ├── features/       # Feature modules
-    │   │   ├── auth/       # Authentication logic
+    │   ├── │   ├── components/  # Auth components
+    │   │   │   ├── hooks/       # useAuth, useUpload hooks
+    │   │   │   ├── pages/       # Login, Register, SongUpload
+    │   │   │   ├── services/    # API services
+    │   │   │   ├── styles/      # Auth & upload styles
+    │   │   │   ├── auth.context.jsx     # Auth context
+    │   │   │   └── upload.context.jsx   # Upload context
     │   │   ├── Home/       # Home & song features
+    │   │   │   ├── components/  # Player component
+    │   │   │   ├── hooks/       # useSong hook
+    │   │   │   └── song.context.jsx
+    │   │   ├── faceExpressions/  # Facial recognition
+    │   │   │   ├── components/   # ExpressionTrack, Navbar
+    │   │   │   ├── styles/       # Navbar styles
+    │   │   │   └── utils/        # Face detection utils
+    │   │   └── shared/     # Shared styles
+    │   ├── components/     # Shared components (Navbar)eatures
     │   │   ├── faceExpressions/  # Facial recognition
     │   │   └── shared/     # Shared styles
     │   ├── App.jsx         # Main app component
@@ -136,15 +155,14 @@ The frontend will run on `http://localhost:5173`
 
 - `npm run dev` - Start development server with hot reload (nodemon)
 - `npm test` - Run test suite
+  GET /logout` - Logout user
+- `GET /get-me` - Get current user profile
 
-### Frontend
+### Songs (`/api/songs`)
 
-- `npm run dev` - Start Vite development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint to check code quality
-
-## API Endpoints 🔌
+- `GET /` - Get songs (optionally filtered by mood)
+- `POST /upload-song` - Upload a new song (MP3 file with mood)
+- Query params: `mood` (happy|sad|surprised), `limit` (default: 1)
 
 ### Authentication (`/api/auth`)
 
@@ -169,23 +187,59 @@ The application uses Google's MediaPipe Vision library to analyze facial express
 
 - Detects emotional states (happy, sad, angry, neutral, etc.)
 - Processes video frames from your webcam
+- Recommends songs that match your curresurprised)
+- Processes video frames from your webcam
+- Real-time camera indicator in navbar
 - Recommends songs that match your current mood
 
-### Authentication
+### Authentication & User Management
 
 Secure user authentication with:
 
 - Password hashing using bcryptjs
 - JWT tokens for session management
 - Cookie-based token storage
+- Protected routes requiring authentication
+- User profile display with username in navbar
+- One-click logout functionality
 
 ### Song Upload & Management
 
-- Upload MP3 files with metadata extraction
-- Store files securely using ImageKit CDN
-- Extract and display song information (title, artist, duration)
+Upload songs with comprehensive features:
 
-## Environment Variables
+- **File Upload**: Drag & drop or click to browse MP3 files
+- **File Validation**:
+  - Only MP3 files accepted
+  - Maximum file size: 10MB
+  - Real-time file size display
+- **Mood Categorization**: Select from Happy 😊, Sad 😢, or Surprised 😮
+- **Metadata Extraction**: Automatic extraction of ID3 tags (title, artist, album art)
+- **Cloud Storage**: Files stored securely using ImageKit CDN
+- **Two-way Data Binding**: Real-time form updates with React state
+
+### Music Player
+
+Full-featured music player with:
+username, email, and password 2. **Login**: Access your account with email and password 3. **Home Page**:
+
+- Enable webcam for facial expression detection
+- Click "Detect Face Expression" to analyze your mood
+- See your current mood displayed in real-time
+
+4. **Upload Songs**:
+   - Click "Upload Song" in the navbar
+   - Drag & drop or browse for an MP3 file (max 10MB)
+   - Select the mood category
+   - Click "Upload Song"
+5. **Music Player**:
+   - Songs load based on detected mood
+   - Click play button to start music (no autoplay)
+   - Use controls for volume, speed, seek, and navigation
+6. **Profile Management**:
+   - View your username in the navbar
+   - Click "Logout" to end your session
+
+- **Album Art Display**: Show song poster/cover image
 
 Create a `.env` file in the backend directory with:
 
@@ -199,6 +253,19 @@ IMAGEKIT_PUBLIC_KEY=your_imagekit_key
 IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
 IMAGEKIT_URL_ENDPOINT=your_imagekit_endpoint
 ```
+
+Project Highlights 🌟
+
+- **Context API Architecture**: Multiple context providers (Auth, Upload, Song) for state management
+- **Custom Hooks**: Reusable hooks (useAuth, useUpload, useSong) for clean component logic
+- **Protected Routes**: Automatic redirection for unauthenticated users
+- **Responsive Design**: Mobile-first approach with SCSS mixins
+- **Error Handling**: Comprehensive error messages and validation
+- **Loading States**: Visual feedback during async operations
+- **File Validation**: Client-side validation before upload
+- **Two-Way Binding**: Controlled form components with React state
+
+##
 
 ## Usage 💡
 
@@ -214,7 +281,20 @@ IMAGEKIT_URL_ENDPOINT=your_imagekit_endpoint
 
 - Chrome/Chromium (v90+)
 - Firefox (v88+)
-- Safari (v14+)
+- Safari (v14open an issue on GitHub.
+
+## Recent Updates 🆕
+
+- ✅ Disabled autoplay - songs only play when user clicks play button
+- ✅ Added logout button to navbar with styled design
+- ✅ Added username display in navbar
+- ✅ Created comprehensive song upload form with file validation
+- ✅ Implemented two-way data binding for all form inputs
+- ✅ Added mood selection dropdown (Happy, Sad, Surprised)
+- ✅ Integrated upload context and custom hooks
+- ✅ Added real-time file size display
+- ✅ Implemented drag & drop file upload interface
+- ✅ Added success/error message handling
 - Edge (v90+)
 
 Note: Facial expression detection requires camera access and works best on desktop browsers.

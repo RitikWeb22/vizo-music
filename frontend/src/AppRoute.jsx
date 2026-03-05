@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/Register";
+import SongUpload from "./features/auth/pages/SongUpload";
 import ProtectedRoute from "./features/auth/components/protectedRoute";
 import Home from "./features/Home/pages/Home";
 
@@ -10,6 +11,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/upload",
+    element: (
+      <ProtectedRoute>
+        <SongUpload />
       </ProtectedRoute>
     ),
   },

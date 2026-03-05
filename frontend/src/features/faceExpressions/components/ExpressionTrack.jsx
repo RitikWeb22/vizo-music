@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { init, detect } from "../utils/utils";
-import Navbar from "./Navbar";
 
 const Expression = ({ onClick = () => {} }) => {
   const videoRef = useRef(null);
@@ -33,7 +32,6 @@ const Expression = ({ onClick = () => {} }) => {
 
   return (
     <>
-      <Navbar />
       <main className="expression-page">
         <section className="expression-card">
           <div className="expression-video-wrapper">

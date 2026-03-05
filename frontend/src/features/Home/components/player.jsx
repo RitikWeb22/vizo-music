@@ -45,7 +45,7 @@ const Player = () => {
     };
   }, [volume, speed, isMuted]);
 
-  // when song changes, reset and auto-play new song
+  // when song changes, reset but don't auto-play
   useEffect(() => {
     if (!audioRef.current) return;
 
@@ -53,18 +53,7 @@ const Player = () => {
     audio.pause();
     audio.currentTime = 0;
     setCurrentTime(0);
-
-    const playNew = async () => {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch {
-        // autoplay can be blocked by browser; keep paused in that case
-        setIsPlaying(false);
-      }
-    };
-
-    playNew();
+    setIsPlaying(false);
   }, [songs?.url]);
 
   const handlePlayPause = () => {
@@ -144,11 +133,7 @@ const Player = () => {
 
   return (
     <div className="player">
-      <img
-        src={songs.posterUrl}
-        alt={songs.title}
-        className="player__poster"
-      />
+      <img src={songs.posterUrl} alt={songs.title} className="player__poster" />
 
       <div className="player__main">
         <div className="player__header">
@@ -183,10 +168,7 @@ const Player = () => {
           <button onClick={handlePlayPause} className="player__play">
             {isPlaying ? "❚❚" : "▶"}
           </button>
-          <button
-            onClick={() => handleFastForward(10)}
-            className="player__ff"
-          >
+          <button onClick={() => handleFastForward(10)} className="player__ff">
             +10s
           </button>
         </div>
