@@ -12,7 +12,7 @@ const AppContent = () => {
 
   return (
     <>
-      <Navbar username={user?.username} onLogout={handleLogout} />
+      {/* <Navbar username={user?.username} onLogout={handleLogout} /> */}
 
       <UploadProvider>
         <SongProvider>
