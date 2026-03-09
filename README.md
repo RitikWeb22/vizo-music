@@ -316,7 +316,7 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 
 ## Support 💬
 
-For support, email support@moodify.com or open an issue on GitHub.
+For support, email ritik30@gmail.com or open an issue on GitHub.
 
 ---
 
