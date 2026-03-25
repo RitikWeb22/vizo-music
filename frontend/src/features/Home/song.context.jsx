@@ -1,20 +1,33 @@
 import { createContext, useState } from "react";
 
+const DEFAULT_SONG = {
+  url: "",
+  posterUrl: "https://placehold.co/480x480/1f2937/4ade80?text=♫",
+  title: "Detect your mood to play music",
+  mood: "neutral",
+};
+
 export const SongContext = createContext();
 
 export function SongProvider({ children }) {
-  const [songs, setSongs] = useState({
-    url: "https://ik.imagekit.io/3wi7dthyny/moodify/songs/Angaaron__From__Pushpa_2_The_Rule____DownloadMing.WS__qaL2IOgyF.mp3?updatedAt=1772569164999",
-    posterUrl:
-      "https://ik.imagekit.io/3wi7dthyny/moodify/poster/Angaaron__From__Pushpa_2_The_Rule____DownloadMing.WS__pIur_wmfM.jpeg?updatedAt=1772569163183",
-    title: 'Angaaron (From "Pushpa 2 The Rule") [DownloadMing.WS]',
-    mood: "happy",
-  });
-
+  const [songs, setSongs] = useState(DEFAULT_SONG);
   const [loading, setLoading] = useState(false);
+  const [shouldAutoplay, setShouldAutoplay] = useState(false);
+
+  const clearAutoplay = () => setShouldAutoplay(false);
 
   return (
-    <SongContext.Provider value={{ songs, setSongs, loading, setLoading }}>
+    <SongContext.Provider
+      value={{
+        songs,
+        setSongs,
+        loading,
+        setLoading,
+        shouldAutoplay,
+        setShouldAutoplay,
+        clearAutoplay,
+      }}
+    >
       {children}
     </SongContext.Provider>
   );

@@ -16,8 +16,18 @@
   gap: 0.5rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
   font-size: 0.95rem;
+}
+
+.navbar__brand-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  line-height: 1.2;
+}
+
+.navbar__title {
+  text-transform: uppercase;
 }
 
 .navbar__brand-mark {

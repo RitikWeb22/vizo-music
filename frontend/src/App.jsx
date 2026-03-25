@@ -4,22 +4,17 @@ import "./features/shared/global.scss";
 import { AuthProvider } from "./features/auth/auth.context";
 import { UploadProvider } from "./features/auth/upload.context";
 import { SongProvider } from "./features/Home/song.context";
-import Navbar from "./components/Navbar";
-import { useAuth } from "./features/auth/hooks/useAuth";
+import { FavoritesProvider } from "./features/Home/favorites.context";
 
 const AppContent = () => {
-  const { user, handleLogout } = useAuth();
-
   return (
-    <>
-      {/* <Navbar username={user?.username} onLogout={handleLogout} /> */}
-
-      <UploadProvider>
-        <SongProvider>
+    <UploadProvider>
+      <SongProvider>
+        <FavoritesProvider>
           <RouterProvider router={router} />
-        </SongProvider>
-      </UploadProvider>
-    </>
+        </FavoritesProvider>
+      </SongProvider>
+    </UploadProvider>
   );
 };
 

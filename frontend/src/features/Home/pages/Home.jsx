@@ -1,14 +1,16 @@
 import React from "react";
-import Player from "../components/player";
-
 import { useSong } from "../hooks/useSong";
 import Expression from "../../faceExpressions/components/ExpressionTrack";
+import "../styles/home.scss";
+
 const Home = () => {
-  const { handleGetSong } = useSong();
+  const { handleGetSong, loading } = useSong();
   return (
-    <div>
-      <Expression onClick={(songs) => handleGetSong({ mood: songs })} />
-      <Player />
+    <div className="home-page">
+      <Expression
+        onClick={(mood) => handleGetSong({ mood })}
+        loading={loading}
+      />
     </div>
   );
 };

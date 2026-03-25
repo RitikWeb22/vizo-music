@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { init, detect } from "../utils/utils";
 
-const Expression = ({ onClick = () => {} }) => {
+const Expression = ({ onClick = () => {}, loading = false }) => {
   const videoRef = useRef(null);
   const landmarkerRef = useRef(null);
-  const [expression, setExpression] = useState("Moodify face detecting...");
+  const [expression, setExpression] = useState("Starting face detection...");
 
   useEffect(() => {
     const start = async () => {
@@ -43,8 +43,12 @@ const Expression = ({ onClick = () => {} }) => {
           </div>
 
           <div className="expression-actions">
-            <button onClick={handleDetect} className="button btn-primary btn">
-              Detect Face Expression
+            <button
+              onClick={handleDetect}
+              className="button btn-primary btn"
+              disabled={loading}
+            >
+              {loading ? "Fetching song…" : "Detect mood & play"}
             </button>
           </div>
         </section>

@@ -4,7 +4,6 @@ import { register, login, getMe, logout } from "../services/auth.api";
 
 export function useAuth() {
   const context = useContext(AuthContext);
-
   const { user, loading, setUser, setLoading } = context;
 
   // Auto check user on app load
@@ -74,6 +73,7 @@ export function useAuth() {
       setLoading(true);
       await logout();
       setUser(null);
+      window.location.href = "/login";
     } finally {
       setLoading(false);
     }

@@ -27,4 +27,10 @@ songRouter.post(
  */
 songRouter.get("/", songController.songPlay);
 
+/**
+ * @route -  GET /api/songs/stream
+ * @query -  url (encoded stream URL - proxies to avoid CORS)
+ */
+songRouter.get("/stream", songController.streamProxy);
+
 module.exports = songRouter;

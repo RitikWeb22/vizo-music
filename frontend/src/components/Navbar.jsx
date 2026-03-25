@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../features/faceExpressions/styles/navbar.scss";
 
 const Navbar = ({ username, onLogout }) => {
@@ -6,24 +7,31 @@ const Navbar = ({ username, onLogout }) => {
       <div className="navbar__brand">
         <div className="navbar__brand-mark">V</div>
         <div>
-          <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <div>VIZO</div>
-            <div className="navbar__subtitle">Face-driven music player</div>
-          </a>
+          <Link to="/" className="navbar__brand-link">
+            <span className="navbar__title">Moodify</span>
+            <span className="navbar__subtitle">Face-driven music</span>
+          </Link>
         </div>
       </div>
 
       <div className="navbar__right">
         {username && (
-          <div className="navbar__user">
-            <span className="navbar__username">{username}</span>
-          </div>
-        )}
-
-        {onLogout && (
-          <button onClick={onLogout} className="navbar__logout-btn">
-            Logout
-          </button>
+          <>
+            <Link to="/favorites" className="navbar__upload-link">
+              Favorites
+            </Link>
+            <Link to="/upload" className="navbar__upload-link">
+              Upload
+            </Link>
+            <div className="navbar__user">
+              <span className="navbar__username">{username}</span>
+            </div>
+            {onLogout && (
+              <button onClick={onLogout} className="navbar__logout-btn">
+                Logout
+              </button>
+            )}
+          </>
         )}
       </div>
     </header>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSong } from "../hooks/useSong";
+import { useFavorites } from "../hooks/useFavorites";
 import "../styles/player.scss";
 
 const Player = () => {
@@ -11,50 +12,71 @@ const Player = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [speed, setSpeed] = useState(1);
 
-  const { songs } = useSong();
+  const { songs, shouldAutoplay, clearAutoplay } = useSong();
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  const updateDuration = () => {
+    if (!audioRef.current) return;
+    const d = audioRef.current.duration;
+    if (typeof d === "number" && !Number.isNaN(d) && isFinite(d)) {
+      setDuration(d);
+    }
+  };
 
   useEffect(() => {
     if (!audioRef.current) return;
 
     const audio = audioRef.current;
 
-    const onLoadedMetadata = () => {
-      setDuration(audio.duration || 0);
-      audio.volume = volume;
-      audio.playbackRate = speed;
-      audio.muted = isMuted;
-    };
-
-    const onTimeUpdate = () => {
-      setCurrentTime(audio.currentTime || 0);
-    };
-
+    const onLoadedMetadata = updateDuration;
+    const onLoadedData = updateDuration;
+    const onDurationChange = updateDuration;
+    const onTimeUpdate = () => setCurrentTime(audio.currentTime || 0);
     const onEnded = () => {
       setIsPlaying(false);
       setCurrentTime(0);
     };
 
+    audio.volume = volume;
+    audio.playbackRate = speed;
+    audio.muted = isMuted;
+
     audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("loadeddata", onLoadedData);
+    audio.addEventListener("durationchange", onDurationChange);
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnded);
 
     return () => {
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("loadeddata", onLoadedData);
+      audio.removeEventListener("durationchange", onDurationChange);
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("ended", onEnded);
     };
   }, [volume, speed, isMuted]);
 
-  // when song changes, reset but don't auto-play
+  // when song changes, reset and optionally autoplay
   useEffect(() => {
     if (!audioRef.current) return;
 
     const audio = audioRef.current;
+    setDuration(0);
     audio.pause();
     audio.currentTime = 0;
     setCurrentTime(0);
     setIsPlaying(false);
-  }, [songs?.url]);
+
+    if (shouldAutoplay && songs?.url) {
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          clearAutoplay();
+        })
+        .catch(() => clearAutoplay());
+    }
+  }, [songs?.url, shouldAutoplay]);
 
   const handlePlayPause = () => {
     if (!audioRef.current) return;
@@ -131,29 +153,50 @@ const Player = () => {
 
   if (!songs) return null;
 
+  const hasTrack = Boolean(songs.url);
+
   return (
-    <div className="player">
-      <img src={songs.posterUrl} alt={songs.title} className="player__poster" />
+    <div className={`player ${!hasTrack ? "player--empty" : ""}`}>
+      <img
+        src={songs.posterUrl || "https://placehold.co/72x72/1f2937/4ade80?text=♫"}
+        alt={songs.title}
+        className="player__poster"
+      />
 
       <div className="player__main">
         <div className="player__header">
           <div className="player__title">{songs.title}</div>
-          <div className="player__mood">{songs.mood}</div>
+          <div className="player__header-right">
+            <button
+              type="button"
+              className={`player__favorite ${isFavorite(songs) ? "player__favorite--active" : ""}`}
+              onClick={() => toggleFavorite(songs)}
+              disabled={!hasTrack}
+              title={isFavorite(songs) ? "Remove from favorites" : "Add to favorites"}
+            >
+              ♥
+            </button>
+            <span className="player__mood">{songs.mood}</span>
+          </div>
         </div>
 
         <input
           className="player__track"
           type="range"
           min={0}
-          max={duration || 0}
-          step={1}
+          max={Math.max(duration || 0, 1)}
+          step={0.1}
           value={currentTime}
           onChange={handleSeek}
+          disabled={!hasTrack}
+          style={{
+            background: `linear-gradient(to right, #22c55e 0%, #22c55e ${(currentTime / Math.max(duration || 1, 1)) * 100}%, rgba(31, 41, 55, 0.9) ${(currentTime / Math.max(duration || 1, 1)) * 100}%, rgba(31, 41, 55, 0.9) 100%)`,
+          }}
         />
 
         <div className="player__time">
           <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+          <span>{formatTime(duration) || "0:00"}</span>
         </div>
       </div>
 
@@ -165,7 +208,11 @@ const Player = () => {
           >
             −10s
           </button>
-          <button onClick={handlePlayPause} className="player__play">
+          <button
+            onClick={handlePlayPause}
+            className="player__play"
+            disabled={!hasTrack}
+          >
             {isPlaying ? "❚❚" : "▶"}
           </button>
           <button onClick={() => handleFastForward(10)} className="player__ff">
@@ -203,7 +250,13 @@ const Player = () => {
         </div>
       </div>
 
-      <audio ref={audioRef} src={songs.url} preload="metadata" />
+      {hasTrack && (
+        <audio
+          ref={audioRef}
+          src={songs.url}
+          preload="auto"
+        />
+      )}
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API } from "../../../config/api";
 
 const api = axios.create({
-    baseURL: "https://vizo-music.onrender.com/api/songs",
-    withCredentials: true,
+  baseURL: API.songs,
+  withCredentials: true,
 });
 
 // Upload song

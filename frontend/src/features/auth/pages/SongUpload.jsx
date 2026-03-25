@@ -119,6 +119,7 @@ const SongUpload = () => {
               <option value="happy">😊 Happy</option>
               <option value="sad">😢 Sad</option>
               <option value="surprised">😮 Surprised</option>
+              <option value="neutral">😐 Neutral</option>
             </select>
           </div>
 
